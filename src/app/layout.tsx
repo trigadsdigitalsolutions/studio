@@ -37,6 +37,9 @@ export const metadata: Metadata = {
     description: "Premium spiritual and leisure travel experiences. Book your next journey with Hifaza Travels Calicut.",
     images: ["/logo@4x.png"],
   },
+  verification: {
+    google: "XSZLA6nykkcXodwzMPUBHUY_eLiGNQ4BkD8f4Mq_L68",
+  },
 };
 
 import { SearchProvider } from "@/context/SearchContext";
