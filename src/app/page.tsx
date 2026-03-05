@@ -412,7 +412,7 @@ export default function Home() {
                 </div>
 
                 <a
-                  href={`https://wa.me/918089296162?text=${encodeURIComponent(`Assalamu Alaikum, I am interested in booking the ${filteredPackages[0].title} package. Please provide more details.`)}`}
+                  href={`https://wa.me/918089296162?text=${encodeURIComponent(`I am interested in booking the ${filteredPackages[0].title} package. Please provide more details.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-white text-[#84194f] px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-2xl flex items-center gap-4 group w-fit"
