@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 const slides = [
     {
@@ -198,9 +199,9 @@ export default function HeroSlider() {
                                 </p>
 
                                 <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-                                    <button className="bg-[#84194f] hover:bg-white text-white hover:text-[#84194f] px-8 md:px-10 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg transition-all flex items-center gap-3 w-fit shadow-2xl border border-white/10 backdrop-blur-sm">
+                                    <Link href="/explore" className="bg-[#84194f] hover:bg-white text-white hover:text-[#84194f] px-8 md:px-10 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg transition-all flex items-center gap-3 w-fit shadow-2xl border border-white/10 backdrop-blur-sm">
                                         Explore <ArrowRight size={20} />
-                                    </button>
+                                    </Link>
                                 </div>
                             </motion.div>
                         </AnimatePresence>
