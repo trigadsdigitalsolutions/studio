@@ -51,7 +51,7 @@ export default function ContactPage() {
                         </div>
                         <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-[2.5rem] hover:bg-white/10 transition-all text-center group">
                             <h4 className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-2">Technical Assistance</h4>
-                            <p className="text-white text-2xl font-black tracking-wide group-hover:text-[#84194f] transition-colors italic">92834 91478</p>
+                            <p className="text-white text-2xl font-black tracking-wide group-hover:text-[#84194f] transition-colors italic">93834 91478</p>
                         </div>
                     </div>
 
