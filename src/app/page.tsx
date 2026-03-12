@@ -146,7 +146,7 @@ const ALL_PACKAGES = [
     image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&q=80&w=600",
     title: "Kerala",
     subtitle: "Weekly Departures",
-    description: "Experience God's Own Country. From the serene backwaters of Alleppey to the misty tea gardens of Munnar. Kerala offers a perfect blend of rejuvenation and natural beauty that will leave you spellbound.",
+    description: "Experience God's Own Country with the best Kerala tour packages from Kozhikode. From the serene backwaters of Alleppey to the misty tea gardens of Munnar. Hifaza Travels Calicut offers a perfect blend of rejuvenation and natural beauty.",
     handle: "@HIFAZA_TOURS",
     borderColor: "#059669",
     gradient: "linear-gradient(145deg, #064e3b, #000)",
@@ -271,7 +271,7 @@ const ALL_PACKAGES = [
     handle: "@HIFAZA_TOURS",
     borderColor: "#f58d6e",
     gradient: "linear-gradient(145deg, #c14a2d, #000)",
-    url: "/prices",
+    url: "/hajj-umrah",
     category: "Pilgrimage"
   },
   {
@@ -282,7 +282,7 @@ const ALL_PACKAGES = [
     handle: "@HIFAZA_TOURS",
     borderColor: "#2fb24c",
     gradient: "linear-gradient(145deg, #064e3b, #000)",
-    url: "/prices",
+    url: "/hajj-umrah",
     category: "Pilgrimage"
   },
   {
@@ -330,6 +330,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="relative">
+        <h1 className="sr-only">Hifaza Travels | Best Kerala Tour Packages from Kozhikode & Calicut</h1>
         <HeroSlider />
       </div>
 

@@ -267,7 +267,7 @@ const ALL_EXPLORE_PACKAGES = [
         handle: "@HIFAZA_TOURS",
         borderColor: "#f58d6e",
         gradient: "linear-gradient(145deg, #c14a2d, #000)",
-        url: "/prices",
+        url: "/hajj-umrah",
         category: "Pilgrimage"
     },
     {
@@ -278,7 +278,7 @@ const ALL_EXPLORE_PACKAGES = [
         handle: "@HIFAZA_TOURS",
         borderColor: "#2fb24c",
         gradient: "linear-gradient(145deg, #064e3b, #000)",
-        url: "/prices",
+        url: "/hajj-umrah",
         category: "Pilgrimage"
     },
     {

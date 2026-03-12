@@ -36,7 +36,7 @@ export default function Footer() {
                                 {['Home', 'Explore', 'Hajj & Umrah', 'Contact'].map((item) => (
                                     <li key={item}>
                                         <Link
-                                            href={item === 'Home' ? '/' : item === 'Hajj & Umrah' ? '/prices' : `/${item.toLowerCase()}`}
+                                            href={item === 'Home' ? '/' : item === 'Hajj & Umrah' ? '/hajj-umrah' : `/${item.toLowerCase()}`}
                                             className="text-white hover:text-[#84194f] transition-colors text-xs font-black uppercase tracking-widest flex items-center gap-2 group"
                                         >
                                             {item}

@@ -13,7 +13,7 @@ const navItems = [
     { path: '/work', label: 'Work' },
     { path: '/explore', label: 'Explore' },
     { path: '/team', label: 'Team' },
-    { path: '/prices', label: 'Hajj & Umrah' },
+    { path: '/hajj-umrah', label: 'Hajj & Umrah' },
 ];
 
 export default function Navbar() {
@@ -133,7 +133,7 @@ export default function Navbar() {
                         <Link href="/work" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-2.5 text-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all">Work</Link>
                         <Link href="/explore" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-2.5 text-sm font-semibold text-gray-900 bg-white shadow-md rounded-lg transition-all">Explore</Link>
                         <Link href="/team" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-2.5 text-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all">Team</Link>
-                        <Link href="/prices" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-2.5 text-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all">Prices</Link>
+                        <Link href="/hajj-umrah" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-2.5 text-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all">Hajj & Umrah</Link>
                         <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-2.5 text-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all mt-2 border-t border-white/10 pt-4">Contact Us</Link>
                     </motion.div>
                 )}

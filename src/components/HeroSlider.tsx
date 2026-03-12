@@ -10,7 +10,7 @@ const slides = [
         id: 1,
         title: "KERALA",
         subtitle: "God's Own Country",
-        description: "Explore the emerald backwaters of Kerala. Our premium tour packages in Kozhikode offer a serene escape into nature's finest landscapes.",
+        description: "Experience the best Kerala tour packages from Kozhikode. Our premium Hifaza tour packages offer serene backwater escapes and misty hill station retreats in Kerala.",
         bgImage: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&q=80&w=2070",
         thumbnailImage: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&q=80&w=800",
         rating: 5
@@ -191,9 +191,9 @@ export default function HeroSlider() {
                                     <span className="text-white/40 text-xs font-medium tracking-widest">0{slides.length}</span>
                                 </div>
 
-                                <h1 className="text-4xl md:text-[60px] lg:text-[75px] xl:text-[95px] font-black text-white/95 leading-[0.85] tracking-tighter mb-6 uppercase drop-shadow-[0_20px_20px_rgba(0,0,0,0.8)]">
+                                <h2 className="text-4xl md:text-[60px] lg:text-[75px] xl:text-[95px] font-black text-white/95 leading-[0.85] tracking-tighter mb-6 uppercase drop-shadow-[0_20px_20px_rgba(0,0,0,0.8)]">
                                     {slides[activeIndex].title}
-                                </h1>
+                                </h2>
                                 <p className="text-sm md:text-lg text-white/90 mb-10 max-w-lg leading-relaxed font-medium drop-shadow-lg opacity-90 border-l-2 border-[#84194f] pl-6">
                                     {slides[activeIndex].description}
                                 </p>
