@@ -58,10 +58,11 @@ export default function HeroSlider() {
     const [direction, setDirection] = useState(1);
     const [cardWidth, setCardWidth] = useState(290);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const isScrollingRef = useRef(false);
 
     // Sync mobile scroll container with active index
     useEffect(() => {
-        if (scrollContainerRef.current) {
+        if (!isScrollingRef.current && scrollContainerRef.current) {
             const container = scrollContainerRef.current;
             const activeCard = container.children[activeIndex] as HTMLElement;
             if (activeCard) {
@@ -70,6 +71,38 @@ export default function HeroSlider() {
             }
         }
     }, [activeIndex]);
+
+    const handleMobileScroll = () => {
+        if (!scrollContainerRef.current) return;
+        
+        isScrollingRef.current = true;
+        const container = scrollContainerRef.current;
+        const scrollCenter = container.scrollLeft + container.clientWidth / 2;
+        
+        let closestIndex = 0;
+        let minDistance = Infinity;
+
+        Array.from(container.children).forEach((child, index) => {
+            const rect = (child as HTMLElement);
+            const childCenter = rect.offsetLeft + rect.clientWidth / 2;
+            const distance = Math.abs(scrollCenter - childCenter);
+            
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = index;
+            }
+        });
+
+        if (closestIndex !== activeIndex) {
+            setActiveIndex(closestIndex);
+        }
+
+        // Reset the scrolling flag after a delay
+        clearTimeout((container as any).scrollTimeout);
+        (container as any).scrollTimeout = setTimeout(() => {
+            isScrollingRef.current = false;
+        }, 150);
+    };
 
     useEffect(() => {
         const handleResize = () => {
@@ -85,9 +118,9 @@ export default function HeroSlider() {
         const intervalId = setInterval(() => {
             setDirection(1);
             setActiveIndex((prev) => (prev + 1) % slides.length);
-        }, 20000); // Wait 15 seconds before sliding
+        }, 6000); // 6 seconds for faster transitions
 
-        return () => clearInterval(intervalId); // Cleanup interval on unmount
+        return () => clearInterval(intervalId);
     }, []);
 
     const nextSlide = () => {
@@ -102,33 +135,27 @@ export default function HeroSlider() {
 
     const handleCardClick = (index: number) => {
         if (index === activeIndex) return;
-        setDirection(1); // Advancing to visual right cards
+        setDirection(1);
         setActiveIndex(index);
     };
 
-    const handleDotClick = (index: number) => {
-        if (index === activeIndex) return;
-        setDirection(index > activeIndex ? 1 : -1);
-        setActiveIndex(index);
-    };
-
-    // Build a dynamically ordered array of the next 3 visible cards using math that gracefully wraps around
+    // Visible cards for Desktop (next 3)
     const getVisibleCards = () => {
-        const visibleCards = [];
+        const visible = [];
         for (let i = 1; i <= 3; i++) {
             const index = (activeIndex + i) % slides.length;
-            visibleCards.push({ ...slides[index], originalIndex: index, position: i });
+            visible.push({ ...slides[index], originalIndex: index, position: i });
         }
-        return visibleCards;
+        return visible;
     };
 
     const visibleCards = getVisibleCards();
 
     return (
-        <section className="relative h-screen w-full flex flex-col bg-black z-20">
-            <div className="absolute inset-0 overflow-hidden">
+        <section className="relative h-screen w-full flex flex-col bg-black z-20 overflow-hidden">
+            <div className="absolute inset-0">
 
-                {/* Background Images Container - Stacked for crossfade without blank screens */}
+                {/* Background Images Crossfade */}
                 {slides.map((slide, index) => (
                     <motion.div
                         key={`bg-${slide.id}`}
@@ -147,12 +174,11 @@ export default function HeroSlider() {
                             className="object-cover"
                             priority={index === 0}
                         />
-                        {/* Elegant dark wash */}
                         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10"></div>
                     </motion.div>
                 ))}
 
-                {/* Massive Animated Background Title */}
+                {/* Animated Huge Background Title */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden">
                     <AnimatePresence mode="wait">
                         <motion.h2
@@ -169,12 +195,8 @@ export default function HeroSlider() {
                 </div>
 
 
-                {/* Main Hero Content */}
-                <div className="relative z-30 pointer-events-none flex-1 flex items-center w-full px-8 md:px-12 lg:px-20 pt-24 md:pt-32 pb-[320px] sm:pb-[280px] md:pb-40">
-
-
-
-                    {/* Text Content and Navigation Buttons */}
+                {/* Main Content Area */}
+                <div className="relative z-50 pointer-events-none flex-1 flex items-center w-full px-6 md:px-12 lg:px-20 pt-20 md:pt-32 pb-[380px] sm:pb-[300px] md:pb-40">
                     <div className="flex flex-col justify-center max-w-lg lg:max-w-2xl relative pointer-events-none">
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -185,22 +207,17 @@ export default function HeroSlider() {
                                 transition={{ duration: 0.5, ease: "easeOut" }}
                                 className="pointer-events-auto"
                             >
-                                <div className="mb-6 flex items-center gap-4">
-                                    <span className="text-[#84194f] font-bold tracking-widest text-sm">0{activeIndex + 1}</span>
-                                    <div className="w-12 h-px bg-white/20" />
-                                    <span className="text-white/40 text-xs font-medium tracking-widest">0{slides.length}</span>
-                                </div>
 
                                 <h2 className="text-4xl md:text-[60px] lg:text-[75px] xl:text-[95px] font-black text-white/95 leading-[0.85] tracking-tighter mb-6 uppercase drop-shadow-[0_20px_20px_rgba(0,0,0,0.8)]">
                                     {slides[activeIndex].title}
                                 </h2>
-                                <p className="text-sm md:text-lg text-white/90 mb-10 max-w-lg leading-relaxed font-medium drop-shadow-lg opacity-90 border-l-2 border-[#84194f] pl-6">
+                                <p className="text-sm md:text-lg text-white/90 mb-8 max-w-lg leading-relaxed font-semibold drop-shadow-lg opacity-90 border-l-4 border-[#84194f] pl-6 italic">
                                     {slides[activeIndex].description}
                                 </p>
 
                                 <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-                                    <Link href="/explore" className="bg-[#84194f] hover:bg-white text-white hover:text-[#84194f] px-8 md:px-10 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg transition-all flex items-center gap-3 w-fit shadow-2xl border border-white/10 backdrop-blur-sm">
-                                        Explore <ArrowRight size={20} />
+                                    <Link href="/explore" className="bg-[#84194f] hover:bg-white text-white hover:text-[#84194f] px-8 py-3.5 md:px-10 md:py-4 rounded-xl md:rounded-2xl font-black text-base md:text-lg transition-all flex items-center gap-3 w-fit shadow-[0_15px_35px_rgba(132,25,79,0.3)] border border-white/10">
+                                        Explore Now <ArrowRight size={20} />
                                     </Link>
                                 </div>
                             </motion.div>
@@ -208,69 +225,39 @@ export default function HeroSlider() {
                     </div>
                 </div>
 
-                {/* Desktop Cards Container - Hidden on Mobile */}
-                <div className="hidden md:block absolute md:bottom-auto md:top-[58%] md:left-[55%] lg:left-[58%] md:right-0 md:-translate-y-1/2 h-[300px] md:h-[450px] pointer-events-none z-20 overflow-visible">
-                    <div className="relative w-full h-full pointer-events-none">
+                {/* Desktop Preview Cards */}
+                <div className="hidden md:block absolute top-[58%] left-[55%] lg:left-[58%] right-0 -translate-y-1/2 h-[450px] pointer-events-none z-20">
+                    <div className="relative w-full h-full">
                         <AnimatePresence custom={direction}>
                             {visibleCards.map((card) => {
                                 const xOffset = (card.position - 1) * (cardWidth + 30);
-
                                 return (
                                     <motion.div
                                         key={card.id}
                                         custom={direction}
                                         variants={{
-                                            enter: (dir: number) => ({
-                                                opacity: 0,
-                                                x: dir > 0 ? xOffset + 290 : xOffset - 290,
-                                                scale: 0.8
-                                            }),
-                                            center: {
-                                                opacity: 1,
-                                                x: xOffset,
-                                                scale: 1
-                                            },
-                                            exit: (dir: number) => ({
-                                                opacity: 0,
-                                                x: dir > 0 ? xOffset - 290 : xOffset + 290,
-                                                scale: 0.8,
-                                                zIndex: 0
-                                            })
+                                            enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? xOffset + 290 : xOffset - 290, scale: 0.8 }),
+                                            center: { opacity: 1, x: xOffset, scale: 1 },
+                                            exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? xOffset - 290 : xOffset + 290, scale: 0.8, zIndex: 0 })
                                         }}
                                         initial="enter"
                                         animate="center"
                                         exit="exit"
                                         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                                        className="absolute top-0 left-8 md:left-0 flex flex-col w-[150px] md:w-[260px] pointer-events-auto group z-20"
+                                        className="absolute top-0 left-0 flex flex-col w-[260px] pointer-events-auto group"
                                     >
-                                        {/* Image Card Element */}
                                         <div
                                             onClick={() => handleCardClick(card.originalIndex)}
-                                            className="relative w-full h-[220px] md:h-[320px] rounded-[1rem] md:rounded-[1.5rem] overflow-hidden cursor-pointer shadow-[0_20px_40px_rgba(0,0,0,0.6)] bg-gray-900 border border-white/10"
+                                            className="relative w-full h-[320px] rounded-[2rem] overflow-hidden cursor-pointer shadow-3xl bg-gray-900 border border-white/10"
                                         >
-                                            <Image
-                                                src={card.thumbnailImage}
-                                                alt={card.title}
-                                                fill
-                                                className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                                                sizes="260px"
-                                            />
+                                            <Image src={card.thumbnailImage} alt={card.title} fill className="object-cover transition-transform duration-1000 group-hover:scale-110" sizes="260px" />
                                             <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
-
-
                                         </div>
-
-                                        {/* Floating Title and Stars - Now Below Card */}
-                                        <div className="mt-4 pl-2 opacity-90 transition-opacity hover:opacity-100 cursor-pointer" onClick={() => handleCardClick(card.originalIndex)}>
-                                            <h3
-                                                className="text-white text-lg font-bold tracking-wider"
-                                                style={{ textShadow: "0px 2px 10px rgba(0,0,0,0.9), 0px 4px 20px rgba(0,0,0,0.8)" }}
-                                            >
-                                                {card.title}
-                                            </h3>
-                                            <div className="flex gap-1 mt-1.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                                        <div className="mt-4 pl-2">
+                                            <h3 className="text-white text-xl font-bold tracking-wider">{card.title}</h3>
+                                            <div className="flex gap-1 mt-2">
                                                 {[...Array(5)].map((_, i) => (
-                                                    <div key={i} className={`w-1 h-1 rounded-full shadow-lg ${i < card.rating ? 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'bg-white/30'}`} />
+                                                    <div key={i} className={`w-1 h-1 rounded-full ${i < card.rating ? 'bg-white shadow-[0_0_8px_white]' : 'bg-white/30'}`} />
                                                 ))}
                                             </div>
                                         </div>
@@ -281,32 +268,38 @@ export default function HeroSlider() {
                     </div>
                 </div>
 
-                {/* Mobile Cards - Horizontal Smooth Scroll Layout */}
-                <div className="md:hidden absolute bottom-4 left-0 right-0 z-20 pointer-events-auto w-full">
+                {/* Improved Mobile Scroll Layout */}
+                <div className="md:hidden absolute bottom-12 left-0 right-0 z-40 pointer-events-auto">
                     <div
                         ref={scrollContainerRef}
-                        className="flex gap-4 overflow-x-auto px-8 snap-x snap-mandatory pt-2 pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                        style={{ WebkitOverflowScrolling: 'touch', scrollBehavior: 'smooth' }}
+                        onScroll={handleMobileScroll}
+                        className="flex gap-6 overflow-x-auto px-10 snap-x snap-mandatory py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                        style={{ WebkitOverflowScrolling: 'touch' }}
                     >
                         {slides.map((slide, index) => (
                             <div
                                 key={slide.id}
                                 onClick={() => handleCardClick(index)}
-                                className={`flex-shrink-0 relative w-[180px] h-[260px] rounded-[1.5rem] overflow-hidden cursor-pointer snap-center transition-all duration-500 shadow-2xl border border-white/10 ${index === activeIndex ? 'scale-100 opacity-100 shadow-[0_4px_30px_rgba(255,255,255,0.15)]' : 'scale-90 opacity-60'}`}
+                                className={`flex-shrink-0 relative w-[200px] h-[280px] rounded-[2rem] overflow-hidden cursor-pointer snap-center transition-all duration-700 shadow-2xl border-2 ${
+                                    index === activeIndex 
+                                    ? 'scale-105 opacity-100 border-[#84194f] shadow-[0_20px_50px_rgba(132,25,79,0.3)]' 
+                                    : 'scale-90 opacity-40 border-white/10'
+                                }`}
                             >
                                 <Image
                                     src={slide.thumbnailImage}
                                     alt={slide.title}
                                     fill
                                     className="object-cover"
-                                    sizes="180px"
+                                    sizes="240px"
                                 />
-                                <div className={`absolute inset-0 transition-colors duration-500 ${index === activeIndex ? 'bg-transparent' : 'bg-black/50'}`} />
-                                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                                    <h3 className="text-white font-bold text-lg leading-tight drop-shadow-md">{slide.title}</h3>
-                                    <div className="flex gap-1 mt-1.5 drop-shadow-md">
+                                <div className={`absolute inset-0 transition-colors duration-700 ${index === activeIndex ? 'bg-transparent' : 'bg-black/40'}`} />
+                                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black via-black/20 to-transparent">
+                                    <h3 className="text-white font-black text-xl tracking-tighter uppercase italic">{slide.title}</h3>
+                                    <p className="text-white/60 text-[10px] font-bold tracking-widest uppercase mb-2">{slide.subtitle}</p>
+                                    <div className="flex gap-1">
                                         {[...Array(5)].map((_, i) => (
-                                            <div key={i} className={`w-1 h-1 rounded-full ${i < slide.rating ? 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'bg-white/30'}`} />
+                                            <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < slide.rating ? 'bg-[#84194f] shadow-[0_0_8px_#84194f]' : 'bg-white/20'}`} />
                                         ))}
                                     </div>
                                 </div>
