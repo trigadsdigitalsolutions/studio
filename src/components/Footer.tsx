@@ -51,7 +51,7 @@ export default function Footer() {
                             <ul className="space-y-4">
                                 {['Terms', 'Privacy', 'Refund', 'Legal'].map((item) => (
                                     <li key={item}>
-                                        <Link href={item === 'Privacy' || item === 'Legal' ? '/privacy' : '#'} className="text-white hover:text-[#84194f] transition-colors text-xs font-black uppercase tracking-widest flex items-center gap-2 group">
+                                        <Link href={item === 'Terms' ? '/terms' : item === 'Privacy' || item === 'Legal' ? '/privacy' : item === 'Refund' ? '/terms#cancellation-refund' : '#'} className="text-white hover:text-[#84194f] transition-colors text-xs font-black uppercase tracking-widest flex items-center gap-2 group">
                                             {item}
                                             <ArrowUpRight size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </Link>
